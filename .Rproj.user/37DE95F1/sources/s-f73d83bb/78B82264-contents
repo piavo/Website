@@ -11,7 +11,7 @@ theme = "hugo-sustain"
   post = "/:year/:month/:day/:slug"
 
 [params]
-  avatar = "Pic.png"
+  avatar = "mypic.png"
   author = "Pia Vo"
   description = "Describe your website"
 
@@ -20,7 +20,7 @@ theme = "hugo-sustain"
   custom_js  = []
 
 [params.social]
-  Github        = "username"
+  Github        = "piavo"
   Email         = "piavo@utexas.edu"
   
   
