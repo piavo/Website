@@ -1,0 +1,7 @@
+"0","#this is a python code chunk 
+r.y+3 == 8"
+"2","Traceback (most recent call last):
+  File ""/tmp/Rtmp2qNvNO/chunk-code-33310e7dbfd.txt"", line 2, in <module>
+    r.y+3 == 8
+NameError: name 'r' is not defined
+"

@@ -1,0 +1,399 @@
+---
+title: "Pima Indians Diabetes Dataset"
+author: "Pia Vo"
+date: "2020-05-01"
+output:
+  html_document
+---
+
+
+
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>This diabetes dataset was obtained from the Kaggle website, and it provides diagnostic information about female patients at least 21 years of age and of Pima Indian heritage. This dataset contains 768 observations and 9 variables measuring the number of pregnancies the patient has had, plasma glucose concentration, blood pressure in mmHg, tricep skin fold thickness in mm, 2-hr serum insulin level in muU/ml, body mass index in kg/m^2, diabetes pedigree function (scores likelihood of diabetes based on family history), age in years, and whether the patient is diabetic (yes/no).</p>
+<pre class="r"><code>data &lt;- read.csv(&quot;diabetes.csv&quot;)
+data &lt;- data %&gt;% na.omit()
+data &lt;- data %&gt;% rename(Preg = Pregnancies, BP = BloodPressure, 
+    ST = SkinThickness, DPF = DiabetesPedigreeFunction)
+head(data)</code></pre>
+<pre><code>##    Preg Glucose BP ST Insulin  BMI   DPF Age Diabetic
+## 4     1      89 66 23      94 28.1 0.167  21       no
+## 5     0     137 40 35     168 43.1 2.288  33      yes
+## 7     3      78 50 32      88 31.0 0.248  26      yes
+## 9     2     197 70 45     543 30.5 0.158  53      yes
+## 14    1     189 60 23     846 30.1 0.398  59      yes
+## 15    5     166 72 19     175 25.8 0.587  51      yes</code></pre>
+<p>NOTE: After 376 rows containing NAs were omitted, there were 392 observations. In addition, some variables were abbreviated for convenience.</p>
+</div>
+<div id="part-1." class="section level2">
+<h2>Part 1.</h2>
+<pre class="r"><code>man1 &lt;- manova(cbind(Preg, Glucose, BP, ST, Insulin, BMI, DPF, 
+    Age) ~ Diabetic, data = data)
+summary(man1)</code></pre>
+<pre><code>## Df Pillai approx F num Df den Df Pr(&gt;F)
+## Diabetic 1 0.34577 25.303 8 383 &lt; 2.2e-16 ***
+## Residuals 390
+## ---
+## Signif. codes: 0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1
+&#39; &#39; 1</code></pre>
+<pre class="r"><code>data %&gt;% group_by(Diabetic) %&gt;% summarize(mean(Preg), mean(Glucose), 
+    mean(BP), mean(ST), mean(Insulin), mean(BMI), mean(DPF), 
+    mean(Age))</code></pre>
+<pre><code>## # A tibble: 2 x 9
+## Diabetic `mean(Preg)` `mean(Glucose)` `mean(BP)`
+`mean(ST)` `mean(Insulin)` `mean(BMI)`
+## &lt;fct&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 no 2.72 111.  69.0 27.3 131.  31.8
+## 2 yes 4.47 145.  74.1 33.0 207.  35.8
+## # … with 2 more variables: `mean(DPF)` &lt;dbl&gt;,
+`mean(Age)` &lt;dbl&gt;</code></pre>
+<pre class="r"><code>summary.aov(man1)</code></pre>
+<pre><code>## Response Preg :
+## Df Sum Sq Mean Sq F value Pr(&gt;F)
+## Diabetic 1 265.4 265.442 27.481 2.605e-07 ***
+## Residuals 390 3767.0 9.659
+## ---
+## Signif. codes: 0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1
+&#39; &#39; 1
+##
+## Response Glucose :
+## Df Sum Sq Mean Sq F value Pr(&gt;F)
+## Diabetic 1 99035 99035 141.3 &lt; 2.2e-16 ***
+## Residuals 390 273348 701
+## ---
+## Signif. codes: 0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1
+&#39; &#39; 1
+##
+## Response BP :
+## Df Sum Sq Mean Sq F value Pr(&gt;F)
+## Diabetic 1 2267 2266.56 15.036 0.0001237 ***
+## Residuals 390 58789 150.74
+## ---
+## Signif. codes: 0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1
+&#39; &#39; 1
+##
+## Response ST :
+## Df Sum Sq Mean Sq F value Pr(&gt;F)
+## Diabetic 1 2833 2832.53 27.337 2.793e-07 ***
+## Residuals 390 40410 103.62
+## ---
+## Signif. codes: 0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1
+&#39; &#39; 1
+##
+## Response Insulin :
+## Df Sum Sq Mean Sq F value Pr(&gt;F)
+## Diabetic 1 501747 501747 38.977 1.121e-09 ***
+## Residuals 390 5020481 12873
+## ---
+## Signif. codes: 0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1
+&#39; &#39; 1
+##
+## Response BMI :
+## Df Sum Sq Mean Sq F value Pr(&gt;F)
+## Diabetic 1 1409 1409.0 30.696 5.563e-08 ***
+## Residuals 390 17902 45.9
+## ---
+## Signif. codes: 0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1
+&#39; &#39; 1
+##
+## Response DPF :
+## Df Sum Sq Mean Sq F value Pr(&gt;F)
+## Diabetic 1 2.045 2.04505 17.872 2.945e-05 ***
+## Residuals 390 44.625 0.11442
+## ---
+## Signif. codes: 0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1
+&#39; &#39; 1
+##
+## Response Age :
+## Df Sum Sq Mean Sq F value Pr(&gt;F)
+## Diabetic 1 5007 5006.9 54.73 8.557e-13 ***
+## Residuals 390 35679 91.5
+## ---
+## Signif. codes: 0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1
+&#39; &#39; 1</code></pre>
+<p>1 MANOVA + 8 ANOVAs = 9 tests. A pairwise t-test was not conducted since there were only two groups (diabetic, non-diabetic).</p>
+<p>Probability of at least one type I error using alpha=0.05: 1-(0.95)^9=0.37.</p>
+<p>Bonferroni correction alpha: 0.05/9=0.0056.</p>
+<p>A one-way MANOVA was conducted to determine the effect of diabetes (diabetic, non-diabetic) on eight dependent variables (number of pregnancies, glucose concentration, blood pressure, skin thickness, insulin, body mass index, diabetic pedigree function, and age). Significant differences were found among the two groups for at least one of the dependent variables, Pillai=0.35, pseudo F(8,383)=25.3, p=&lt;0.0001.</p>
+<p>Univariate ANOVAs for each dependent variable were conducted as follow-up tests to the MANOVA. Even after the significance level was adjusted using the Bonferroni method, the univariable ANOVAs still showed a significant difference between the two groups for all the variables: pregnancies (F(1,390)=27.48, p=&lt;0.0001), glucose (F(1,390)=141.3, p=&lt;0.0001), blood pressure(F(1,390)=15.04, p=&lt;0.0001), skin thickness (F(1,390)=27.34, p=&lt;0.0001), insulin (F(1,390)=38.98, p=&lt;0.0001), body mass index (F(1,390)=30.7, p=&lt;0.0001), diabetic pedigree function (F(1,390)=17.87, p=&lt;0.0001), and age (F(1,390)=54.73, p=&lt;0.0001).</p>
+<p>The assumption for multivariate normality was met as each group had more than 25 counts. However, the assumptions of homogeneity, linear relationships amoung DVs, no extreme univariate/multivariate outliers,and no multicollinearity were likely violated.</p>
+</div>
+<div id="part-2." class="section level2">
+<h2>Part 2.</h2>
+<pre class="r"><code>data %&gt;% group_by(Diabetic) %&gt;% summarize(means = mean(ST)) %&gt;% 
+    summarize(`mean_diff:` = diff(means))</code></pre>
+<pre><code>## # A tibble: 1 x 1
+##   `mean_diff:`
+##          &lt;dbl&gt;
+## 1         5.71</code></pre>
+<pre class="r"><code>rand_dist &lt;- vector()
+for (i in 1:5000) {
+    new &lt;- data.frame(ST = sample(data$ST), Diabetic = data$Diabetic)
+    rand_dist[i] &lt;- mean(new[new$Diabetic == &quot;yes&quot;, ]$ST) - mean(new[new$Diabetic == 
+        &quot;no&quot;, ]$ST)
+}
+
+hist(rand_dist, main = &quot;Mean Difference in Skin Thickness for Diabetics vs. Non-Diabetics&quot;, 
+    ylab = &quot;Frequency&quot;)
+abline(v = 5.70963, col = &quot;red&quot;)</code></pre>
+<p><img src="/project2_files/figure-html/unnamed-chunk-3-1.png" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>mean(rand_dist &gt; 5.70963 | rand_dist &lt; -5.70963)  #p-value</code></pre>
+<pre><code>## [1] 0</code></pre>
+<p>Null hypothesis: Mean skin thickness is the same for Pima Indian diabetics vs. non-diabetics.</p>
+<p>Alternative hypothesis: Mean skin thickness is different for Pima Indian diabetics vs. non-diabetics.</p>
+<p>The p-value corresponds to the probability of observing a mean difference as extreme as the one we observed in our original data under this “randomization distribution”. The p-value was 0, meaning that if the null hypothesis were true, it would be exceedingly rare to get a mean difference as big as +/-5.71 mm. This indicates that there is a significant difference in skin thickness between Pima Indian diabetics and Pima Indian non-diabetics.</p>
+</div>
+<div id="part-3." class="section level2">
+<h2>Part 3.</h2>
+<pre class="r"><code>data$Glucose_c &lt;- data$Glucose - mean(data$Glucose)
+data$Age_c &lt;- data$Age - mean(data$Age)
+fit &lt;- lm(BP ~ Age_c * Glucose_c, data = data)
+summary(fit)</code></pre>
+<pre><code>##
+## Call:
+## lm(formula = BP ~ Age_c * Glucose_c, data = data)
+##
+## Residuals:
+## Min 1Q Median 3Q Max
+## -41.041 -7.086 -0.621 6.789 40.210
+##
+## Coefficients:
+## Estimate Std. Error t value Pr(&gt;|t|)
+## (Intercept) 71.10022 0.63082 112.711 &lt; 2e-16 ***
+## Age_c 0.36200 0.06591 5.493 7.18e-08 ***
+## Glucose_c 0.05104 0.02063 2.474 0.0138 *
+## Age_c:Glucose_c -0.00405 0.00190 -2.132 0.0337 *
+## ---
+## Signif. codes: 0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1
+&#39; &#39; 1
+##
+## Residual standard error: 11.81 on 388 degrees of freedom
+## Multiple R-squared: 0.1134, Adjusted R-squared: 0.1065
+## F-statistic: 16.54 on 3 and 388 DF, p-value: 3.934e-10</code></pre>
+<pre class="r"><code>library(ggplot2)
+qplot(x = Glucose_c, y = BP, color = Age_c, data = data) + stat_smooth(method = &quot;lm&quot;, 
+    se = FALSE, fullrange = TRUE)</code></pre>
+<p><img src="/project2_files/figure-html/unnamed-chunk-4-1.png" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>new1 &lt;- data
+new1$Age_c &lt;- mean(data$Age_c)
+new1$mean &lt;- predict(fit, new1)
+new1$Age_c &lt;- mean(data$Age_c) + sd(data$Age_c)
+new1$plus.sd &lt;- predict(fit, new1)
+new1$Age_c &lt;- mean(data$Age_c) - sd(data$Age_c)
+new1$minus.sd &lt;- predict(fit, new1)
+newint &lt;- new1 %&gt;% dplyr::select(BP, Glucose_c, mean, plus.sd, 
+    minus.sd) %&gt;% gather(Age, value, -BP, -Glucose_c)
+mycols &lt;- c(&quot;#619CFF&quot;, &quot;#F8766D&quot;, &quot;#00BA38&quot;)
+names(mycols) &lt;- c(&quot;-1 sd&quot;, &quot;mean&quot;, &quot;+1 sd&quot;)
+mycols = as.factor(mycols)
+ggplot(data, aes(Glucose_c, BP), group = mycols) + geom_point() + 
+    geom_line(data = new1, aes(y = mean, color = &quot;mean&quot;)) + geom_line(data = new1, 
+    aes(y = plus.sd, color = &quot;+1 sd&quot;)) + geom_line(data = new1, 
+    aes(y = minus.sd, color = &quot;-1 sd&quot;)) + scale_color_manual(values = mycols) + 
+    labs(color = &quot;Age (cont)&quot;) + theme(legend.position = c(0.9, 
+    0.2))</code></pre>
+<p><img src="/project2_files/figure-html/unnamed-chunk-4-2.png" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>library(lmtest)
+resids &lt;- fit$residuals
+fitvals &lt;- fit$fitted.values
+ggplot() + geom_point(aes(fitvals, resids)) + geom_hline(yintercept = 0, 
+    col = &quot;red&quot;)</code></pre>
+<p><img src="/project2_files/figure-html/unnamed-chunk-4-3.png" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>bptest(fit)</code></pre>
+<pre><code>## 
+##  studentized Breusch-Pagan test
+## 
+## data:  fit
+## BP = 0.42343, df = 3, p-value = 0.9354</code></pre>
+<pre class="r"><code>ggplot() + geom_histogram(aes(resids), bins = 20)</code></pre>
+<p><img src="/project2_files/figure-html/unnamed-chunk-4-4.png" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ks.test(resids, &quot;pnorm&quot;, mean = 0, sd(resids))</code></pre>
+<pre><code>## 
+##  One-sample Kolmogorov-Smirnov test
+## 
+## data:  resids
+## D = 0.037663, p-value = 0.6344
+## alternative hypothesis: two-sided</code></pre>
+<pre class="r"><code>library(sandwich)
+coeftest(fit)[, 1:2]</code></pre>
+<pre><code>##                    Estimate  Std. Error
+## (Intercept)     71.10022463 0.630819066
+## Age_c            0.36199736 0.065905841
+## Glucose_c        0.05104263 0.020631844
+## Age_c:Glucose_c -0.00404953 0.001899618</code></pre>
+<pre class="r"><code>coeftest(fit, vcov = vcovHC(fit))[, 1:2]</code></pre>
+<pre><code>##                    Estimate Std. Error
+## (Intercept)     71.10022463 0.64193673
+## Age_c            0.36199736 0.06601070
+## Glucose_c        0.05104263 0.02100935
+## Age_c:Glucose_c -0.00404953 0.00199833</code></pre>
+<p>Blood pressure = 71.1 + 0.362(Age_c) + 0.051(Glucose_c) - 0.00405(Age_C*Glucose_c)</p>
+<p>Intercept: Predicted blood pressure for an average age and glucose concentration is 71.1 mmHg.</p>
+<p>Age_c: Controlling for glucose concentration, there is a 0.36 mmHg increase in blood pressure for every 1-unit increase in age on average.</p>
+<p>Glucose_c: Controlling for age, there is a 0.051 mmHg increase in blood pressure for every 1-unit increase in glucose on average.</p>
+<p>Age_c:Glucose_c: For every 1-unit increase in age, the slope for glucose decreases by 0.00405. (As age increases, the relationship between glucose and BP weakens.)</p>
+<p>In addition, the linearity, normality, and homoskedasticity assumptions were met. Using robust standard errors, the standard errors slightly increased for Age_c, Glucose_c, and Age_c:Glucose_c. The adjusted R-squared value was 0.1065, meaning that 10.65% of the variation in blood pressure is explained by the model.</p>
+</div>
+<div id="part-4." class="section level2">
+<h2>Part 4.</h2>
+<pre class="r"><code>samp_distn &lt;- replicate(5000, {
+    boot_dat &lt;- sample_frac(data, replace = T)
+    fit &lt;- lm(BP ~ Age_c * Glucose_c, data = boot_dat)
+    coef(fit)
+})
+samp_distn %&gt;% t %&gt;% as.data.frame %&gt;% summarize_all(sd)</code></pre>
+<pre><code>##   (Intercept)      Age_c  Glucose_c Age_c:Glucose_c
+## 1   0.6422775 0.06491918 0.02068053     0.001955125</code></pre>
+<p>Compared to the original standard errors, all the bootstrapped standard errors were higher except for Age_c where it was slightly lower. Higher standard errors correspond to lower p-values. Compared to the robust standard errors, all the bootstrapped standard errors were lower. Lower standard errors correspond to higher p-values.</p>
+</div>
+<div id="part-5." class="section level2">
+<h2>Part 5.</h2>
+<pre class="r"><code>data &lt;- data %&gt;% mutate(y = ifelse(Diabetic == &quot;yes&quot;, 1, 0))
+fit1 &lt;- glm(y ~ DPF + ST, data = data, family = binomial(link = &quot;logit&quot;))
+coeftest(fit1)</code></pre>
+<pre><code>##
+## z test of coefficients:
+##
+## Estimate Std. Error z value Pr(&gt;|z|)
+## (Intercept) -2.804748 0.399432 -7.0218 2.190e-12 ***
+## DPF 1.127858 0.343379 3.2846 0.001021 **
+## ST 0.049952 0.011256 4.4377 9.094e-06 ***
+## ---
+## Signif. codes: 0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1
+&#39; &#39; 1</code></pre>
+<pre class="r"><code>exp(coef(fit1))</code></pre>
+<pre><code>## (Intercept)         DPF          ST 
+##  0.06052201  3.08903202  1.05122084</code></pre>
+<pre class="r"><code>probs &lt;- predict(fit1, type = &quot;response&quot;)
+table(predict = as.numeric(probs &gt; 0.5), truth = data$y) %&gt;% 
+    addmargins</code></pre>
+<pre><code>##        truth
+## predict   0   1 Sum
+##     0   239 102 341
+##     1    23  28  51
+##     Sum 262 130 392</code></pre>
+<pre class="r"><code>(239 + 28)/392  #accuracy </code></pre>
+<pre><code>## [1] 0.6811224</code></pre>
+<pre class="r"><code>28/130  #sensitivity </code></pre>
+<pre><code>## [1] 0.2153846</code></pre>
+<pre class="r"><code>239/262  #specificity</code></pre>
+<pre><code>## [1] 0.9122137</code></pre>
+<pre class="r"><code>28/51  #precision </code></pre>
+<pre><code>## [1] 0.5490196</code></pre>
+<pre class="r"><code>data$logit &lt;- predict(fit1, type = &quot;link&quot;)
+ggplot(data, aes(logit, fill = Diabetic)) + geom_density(alpha = 0.3) + 
+    geom_vline(xintercept = 0, lty = 2)</code></pre>
+<p><img src="/project2_files/figure-html/unnamed-chunk-6-1.png" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>library(plotROC)
+ROCplot &lt;- ggplot(data) + geom_roc(aes(d = y, m = probs), n.cuts = 0)
+ROCplot</code></pre>
+<p><img src="/project2_files/figure-html/unnamed-chunk-6-2.png" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>calc_auc(ROCplot)</code></pre>
+<pre><code>##   PANEL group       AUC
+## 1     1    -1 0.6881386</code></pre>
+<pre class="r"><code>class_diag &lt;- function(probs, truth) {
+    
+    tab &lt;- table(factor(probs &gt; 0.5, levels = c(&quot;FALSE&quot;, &quot;TRUE&quot;)), 
+        truth)
+    acc = sum(diag(tab))/sum(tab)
+    sens = tab[2, 2]/colSums(tab)[2]
+    spec = tab[1, 1]/colSums(tab)[1]
+    ppv = tab[2, 2]/rowSums(tab)[2]
+    
+    if (is.numeric(truth) == FALSE &amp; is.logical(truth) == FALSE) 
+        truth &lt;- as.numeric(truth) - 1
+    
+    ord &lt;- order(probs, decreasing = TRUE)
+    probs &lt;- probs[ord]
+    truth &lt;- truth[ord]
+    
+    TPR = cumsum(truth)/max(1, sum(truth))
+    FPR = cumsum(!truth)/max(1, sum(!truth))
+    
+    dup &lt;- c(probs[-1] &gt;= probs[-length(probs)], FALSE)
+    TPR &lt;- c(0, TPR[!dup], 1)
+    FPR &lt;- c(0, FPR[!dup], 1)
+    
+    n &lt;- length(TPR)
+    auc &lt;- sum(((TPR[-1] + TPR[-n])/2) * (FPR[-1] - FPR[-n]))
+    
+    data.frame(acc, sens, spec, ppv, auc)
+}
+
+ndata &lt;- data %&gt;% dplyr::select(-Diabetic, -Glucose_c, -Age_c, 
+    -logit)
+
+
+set.seed(1234)
+fraction &lt;- 0.5
+train_n &lt;- floor(fraction * nrow(ndata))
+iter &lt;- 500
+diags &lt;- NULL
+for (i in 1:iter) {
+    train_index &lt;- sample(1:nrow(ndata), size = train_n)
+    train &lt;- ndata[train_index, ]
+    test &lt;- ndata[-train_index, ]
+    truth &lt;- test$y
+    fit2 &lt;- glm(y ~ (.)^2, data = train, family = &quot;binomial&quot;)
+    probs &lt;- predict(fit2, newdata = test, type = &quot;response&quot;)
+    diags &lt;- rbind(diags, class_diag(probs, truth))
+}
+
+summarize_all(diags, mean)</code></pre>
+<pre><code>##         acc      sens     spec      ppv       auc
+## 1 0.7339898 0.5519635 0.825854 0.614134 0.7721101</code></pre>
+<p>Intercept: odds of diabetes when diabetic pedigree function=0 and skin thickness=0 is 0.0605.</p>
+<p>DPF: controlling for skin thickness, for every one additional DPF point, odds of diabetes increase by a factor of 3.089 (significant).</p>
+<p>ST: controlling for DPF, for every one additional mm in skin thickness, odds of diabetes increase by a factor of 1.051 (significant).</p>
+<p>From the confusion matrix, there was an accuracy of 0.681, sensivity (TPR) of 0.215, specificity (TNR) of 0.912, and recall (PPV) of 0.549. The accurary is the proportion of correctly classified cases, the sensivity is the proportion of diabetic patients correctly classified, the specificity is the proportion of non-diabetics correctly classified, and precision is the proportion classified as diabetic who actually are. In addition, a density plot was used to visualize this. The calculated AUC from the ROC plot was 0.688. This is a poor AUC value, meaning that it is difficult to predict the odds of being diabetic from the diabetic pedigree function and skin thickness alone. With a 10 fold CV, there was an out-of-sample accuracy of 0.734, sensitivity of 0.554, specificity of 0.826, and recall of 0.614.</p>
+</div>
+<div id="part-6." class="section level2">
+<h2>Part 6.</h2>
+<pre class="r"><code>library(glmnet)
+y &lt;- as.matrix(ndata$y)
+x &lt;- model.matrix(y ~ ., data = ndata)[, -1]
+head(x)</code></pre>
+<pre><code>##   Preg Glucose BP ST Insulin  BMI   DPF Age
+## 1    1      89 66 23      94 28.1 0.167  21
+## 2    0     137 40 35     168 43.1 2.288  33
+## 3    3      78 50 32      88 31.0 0.248  26
+## 4    2     197 70 45     543 30.5 0.158  53
+## 5    1     189 60 23     846 30.1 0.398  59
+## 6    5     166 72 19     175 25.8 0.587  51</code></pre>
+<pre class="r"><code>cv &lt;- cv.glmnet(x, y, family = &quot;binomial&quot;)
+lasso &lt;- glmnet(x, y, family = &quot;binomial&quot;, lambda = cv$lambda.1se)
+coef(lasso)</code></pre>
+<pre><code>## 9 x 1 sparse Matrix of class &quot;dgCMatrix&quot;
+##                       s0
+## (Intercept) -6.939553953
+## Preg         0.024666262
+## Glucose      0.028796380
+## BP           .          
+## ST           0.004638423
+## Insulin      .          
+## BMI          0.037453583
+## DPF          0.430683621
+## Age          0.027742429</code></pre>
+<pre class="r"><code>set.seed(1234)
+k = 10
+data1 &lt;- ndata %&gt;% sample_frac
+folds &lt;- ntile(1:nrow(data), n = 10)
+
+diags &lt;- NULL
+for (i in 1:k) {
+    train &lt;- data1[folds != i, ]
+    test &lt;- data1[folds == i, ]
+    truth &lt;- test$y
+    
+    fit3 &lt;- glm(y ~ Glucose + ST + BMI + DPF + Age, data = train, 
+        family = &quot;binomial&quot;)
+    probs &lt;- predict(fit3, newdata = test, type = &quot;response&quot;)
+    
+    diags &lt;- rbind(diags, class_diag(probs, truth))
+}
+
+diags %&gt;% summarize_all(mean)</code></pre>
+<pre><code>##         acc      sens      spec       ppv       auc
+## 1 0.7807051 0.5559596 0.8819413 0.7091993 0.8475984</code></pre>
+<p>This Lasso regression shows that glucose, skin thickness, BMI, DPF, and age were the most predictive of diabetes. 10-fold CV was performed, and the model’s out-of-sample accuracy of 0.781 was higher compared to that of the logistic regression (0.688). In addition, the model’s AUC of 0.848 was higher than that of the logistic regression (0.681)</p>
+</div>

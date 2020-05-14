@@ -1,0 +1,4 @@
+"0","data <-read.csv(""diabetes.csv"")"
+"0","data <-data %>% na.omit()"
+"0","data <- data %>% rename(Preg=Pregnancies, BP=BloodPressure, ST=SkinThickness, DPF=DiabetesPedigreeFunction)"
+"0","head(data)"

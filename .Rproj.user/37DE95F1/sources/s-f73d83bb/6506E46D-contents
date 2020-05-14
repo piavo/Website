@@ -1,0 +1,270 @@
+---
+title: "Pima Indians Diabetes Dataset"
+author: "Pia Vo"
+date: "05/01/2020"
+output:
+  pdf_document:
+    toc: yes
+  html_document:
+    toc: yes
+    toc_float:
+      collapsed: no
+      smooth_scroll: yes
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+hook_output = knit_hooks$get('output')
+knit_hooks$set(output = function(x, options) {
+  # this hook is used only when the linewidth option is not NULL
+  if (!is.null(n <- options$linewidth)) {
+    x = knitr:::split_lines(x)
+    # any lines wider than n should be wrapped
+    if (any(nchar(x) > n)) x = strwrap(x, width = n)
+    x = paste(x, collapse = '\n')
+  }
+  hook_output(x, options)
+})
+
+knitr::opts_chunk$set(echo = TRUE, eval = TRUE,fig.align="center",warning=FALSE,message=FALSE,fig.width=8, fig.height=5, linewidth=60)
+options(tibble.width = 100,width = 100)
+opts_chunk$set(tidy.opts=list(width.cutoff=60),tidy=TRUE)
+library(tidyverse)
+library(tidyr) 
+library(dplyr) 
+library(devtools) 
+library(readxl)
+```
+
+## Introduction 
+
+This diabetes dataset was obtained from the Kaggle website, and it provides diagnostic information about female patients at least 21 years of age and of Pima Indian heritage. This dataset contains 768 observations and 9 variables measuring the number of pregnancies the patient has had, plasma glucose concentration, blood pressure in mmHg, tricep skin fold thickness in mm, 2-hr serum insulin level in muU/ml, body mass index in kg/m^2, diabetes pedigree function (scores likelihood of diabetes based on family history), age in years, and whether the patient is diabetic (yes/no).
+
+
+```{R}
+data <-read.csv("diabetes.csv")
+data <-data %>% na.omit()
+data <- data %>% rename(Preg=Pregnancies, BP=BloodPressure, ST=SkinThickness, DPF=DiabetesPedigreeFunction)
+head(data)
+```
+
+NOTE: After 376 rows containing NAs were omitted, there were 392 observations. In addition, some variables were abbreviated for convenience. 
+
+## Part 1. 
+
+```{R}
+man1<-manova(cbind(Preg,Glucose,BP,ST,Insulin,BMI,DPF,Age)~Diabetic, data=data)
+summary(man1)
+data%>%group_by(Diabetic)%>%summarize(mean(Preg),mean(Glucose),mean(BP),mean(ST),mean(Insulin),mean(BMI),mean(DPF),mean(Age))
+summary.aov(man1)
+```
+
+1 MANOVA + 8 ANOVAs = 9 tests. A pairwise t-test was not conducted since there were only two groups (diabetic, non-diabetic). 
+
+Probability of at least one type I error using alpha=0.05: 1-(0.95)^9=0.37.  
+
+Bonferroni correction alpha: 0.05/9=0.0056. 
+
+A one-way MANOVA was conducted to determine the effect of diabetes (diabetic, non-diabetic) on eight dependent variables (number of pregnancies, glucose concentration, blood pressure, skin thickness, insulin, body mass index, diabetic pedigree function, and age). Significant differences were found among the two groups for at least one of the dependent variables, Pillai=0.35, pseudo F(8,383)=25.3, p=<0.0001. 
+
+Univariate ANOVAs for each dependent variable were conducted as follow-up tests to the MANOVA. Even after the significance level was adjusted using the Bonferroni method, the univariable ANOVAs still showed a significant difference between the two groups for all the variables: pregnancies (F(1,390)=27.48, p=<0.0001), glucose (F(1,390)=141.3, p=<0.0001), blood pressure(F(1,390)=15.04, p=<0.0001), skin thickness (F(1,390)=27.34, p=<0.0001), insulin (F(1,390)=38.98, p=<0.0001), body mass index (F(1,390)=30.7, p=<0.0001), diabetic pedigree function (F(1,390)=17.87, p=<0.0001), and age (F(1,390)=54.73, p=<0.0001). 
+
+The assumption for multivariate normality was met as each group had more than 25 counts. However, the assumptions of homogeneity, linear relationships amoung DVs, no extreme univariate/multivariate outliers,and no multicollinearity were likely  violated. 
+
+## Part 2.
+
+```{R}
+data%>%group_by(Diabetic)%>% summarize(means=mean(ST))%>%summarize(`mean_diff:`=diff(means))
+
+rand_dist<-vector()
+for(i in 1:5000){
+new<-data.frame(ST=sample(data$ST),Diabetic=data$Diabetic) 
+rand_dist[i]<-mean(new[new$Diabetic=="yes",]$ST)-
+              mean(new[new$Diabetic=="no",]$ST)}
+
+hist(rand_dist,main="Mean Difference in Skin Thickness for Diabetics vs. Non-Diabetics", ylab="Frequency");abline(v =5.70963,col="red")
+
+mean(rand_dist>5.70963 | rand_dist< -5.70963) #p-value
+```
+
+Null hypothesis: Mean skin thickness is the same for Pima Indian diabetics vs. non-diabetics. 
+
+Alternative hypothesis: Mean skin thickness is different for Pima Indian diabetics vs. non-diabetics.
+
+The p-value corresponds to the probability of observing a mean difference as extreme as the one we observed in our original data under this "randomization distribution". The p-value was 0, meaning that if the null hypothesis were true, it would be exceedingly rare to get a mean difference as big as +/-5.71 mm. This indicates that there is a significant difference in skin thickness between Pima Indian diabetics and Pima Indian non-diabetics.
+
+## Part 3. 
+
+```{R}
+data$Glucose_c <- data$Glucose - mean(data$Glucose)
+data$Age_c <- data$Age - mean(data$Age)
+fit<-lm(BP ~ Age_c*Glucose_c, data=data)
+summary(fit)
+
+library(ggplot2) 
+qplot(x = Glucose_c, y = BP, color = Age_c, data = data) +
+  stat_smooth(method = "lm", se = FALSE, fullrange = TRUE)
+
+new1<-data
+new1$Age_c<-mean(data$Age_c)
+new1$mean<-predict(fit,new1)
+new1$Age_c<-mean(data$Age_c)+sd(data$Age_c)
+new1$plus.sd<-predict(fit,new1)
+new1$Age_c<-mean(data$Age_c)-sd(data$Age_c)
+new1$minus.sd<-predict(fit,new1)
+newint<-new1%>%dplyr::select(BP,Glucose_c,mean,plus.sd,minus.sd)%>%gather(Age,value,-BP,-Glucose_c)
+mycols<-c("#619CFF","#F8766D","#00BA38")
+names(mycols)<-c("-1 sd","mean","+1 sd")
+mycols=as.factor(mycols)
+ggplot(data,aes(Glucose_c,BP),group=mycols)+geom_point()+geom_line(data=new1,aes(y=mean,color="mean"))+geom_line(data=new1,aes(y=plus.sd,color="+1 sd"))+geom_line(data=new1,aes(y=minus.sd,color="-1 sd"))+scale_color_manual(values=mycols)+labs(color="Age (cont)")+theme(legend.position=c(.9,.2))
+
+library(lmtest)
+resids<-fit$residuals
+fitvals<-fit$fitted.values
+ggplot()+geom_point(aes(fitvals,resids))+geom_hline(yintercept=0, col="red")
+bptest(fit)
+ggplot()+geom_histogram(aes(resids), bins=20)
+ks.test(resids, "pnorm", mean=0, sd(resids))
+
+library(sandwich)
+coeftest(fit)[,1:2]
+coeftest(fit, vcov=vcovHC(fit))[,1:2]
+```
+
+Blood pressure = 71.1 + 0.362(Age_c) + 0.051(Glucose_c) - 0.00405(Age_C*Glucose_c)
+
+Intercept: Predicted blood pressure for an average age and glucose concentration is 71.1 mmHg. 
+
+Age_c: Controlling for glucose concentration, there is a 0.36 mmHg increase in blood pressure for every 1-unit increase in age on average. 
+
+Glucose_c: Controlling for age, there is a 0.051 mmHg increase in blood pressure for every 1-unit increase in glucose on average. 
+
+Age_c:Glucose_c: For every 1-unit increase in age, the slope for glucose decreases by 0.00405. (As age increases, the relationship between glucose and BP weakens.)
+
+In addition, the linearity, normality, and homoskedasticity assumptions were met. Using robust standard errors, the standard errors slightly increased for Age_c, Glucose_c, and Age_c:Glucose_c. The adjusted R-squared value was 0.1065, meaning that 10.65% of the variation in blood pressure is explained by the model.  
+
+
+## Part 4. 
+
+```{R}
+samp_distn<-replicate(5000, {
+boot_dat <- sample_frac(data, replace=T) 
+fit <- lm(BP~Age_c*Glucose_c, data=boot_dat) 
+coef(fit)
+})
+samp_distn %>% t %>% as.data.frame %>% summarize_all(sd)
+```
+
+Compared to the original standard errors, all the bootstrapped standard errors were higher except for Age_c where it was slightly lower. Higher standard errors correspond to lower p-values. Compared to the robust standard errors, all the bootstrapped standard errors were lower. Lower standard errors correspond to higher p-values. 
+
+## Part 5.
+
+```{R}
+data<-data%>%mutate(y=ifelse(Diabetic=="yes",1,0))
+fit1<-glm(y~DPF+ST,data=data,family=binomial(link="logit"))
+coeftest(fit1)
+exp(coef(fit1))
+
+probs<-predict(fit1,type="response") 
+table(predict=as.numeric(probs>.5),truth=data$y)%>%addmargins
+(239+28)/392 #accuracy 
+28/130 #sensitivity 
+239/262 #specificity
+28/51 #precision 
+
+data$logit<-predict(fit1,type="link")
+ggplot(data,aes(logit, fill=Diabetic))+geom_density(alpha=.3)+ geom_vline(xintercept=0,lty=2)
+
+library(plotROC)
+ROCplot<-ggplot(data)+geom_roc(aes(d=y,m=probs), n.cuts=0) 
+ROCplot
+calc_auc(ROCplot)
+
+class_diag <- function(probs,truth){
+  
+tab<-table(factor(probs>.5,levels=c("FALSE","TRUE")),truth)
+  acc=sum(diag(tab))/sum(tab)
+  sens=tab[2,2]/colSums(tab)[2]
+  spec=tab[1,1]/colSums(tab)[1]
+  ppv=tab[2,2]/rowSums(tab)[2]
+  
+  if(is.numeric(truth)==FALSE & is.logical(truth)==FALSE) truth<-as.numeric(truth)-1
+  
+  ord<-order(probs, decreasing=TRUE)
+  probs <- probs[ord]; truth <- truth[ord]
+  
+  TPR=cumsum(truth)/max(1,sum(truth)) 
+  FPR=cumsum(!truth)/max(1,sum(!truth))
+  
+  dup<-c(probs[-1]>=probs[-length(probs)], FALSE)
+  TPR<-c(0,TPR[!dup],1); FPR<-c(0,FPR[!dup],1)
+  
+  n <- length(TPR)
+  auc<- sum( ((TPR[-1]+TPR[-n])/2) * (FPR[-1]-FPR[-n]) )
+  
+  data.frame(acc,sens,spec,ppv,auc)
+}
+
+ndata <-data %>% dplyr::select(-Diabetic,-Glucose_c, -Age_c, -logit)
+
+
+set.seed(1234)
+fraction<-0.5 
+train_n<-floor(fraction*nrow(ndata)) 
+iter<-500 
+diags<-NULL
+for(i in 1:iter){
+  train_index<-sample(1:nrow(ndata),size=train_n)
+  train<-ndata[train_index,] 
+  test<-ndata[-train_index,]
+  truth<-test$y
+  fit2<-glm(y~(.)^2,data=train,family="binomial")
+  probs <-predict(fit2,newdata = test,type="response")
+  diags<-rbind(diags,class_diag(probs,truth))
+}
+
+summarize_all(diags,mean) 
+```
+
+Intercept: odds of diabetes when diabetic pedigree function=0 and skin thickness=0 is 0.0605. 
+
+DPF: controlling for skin thickness, for every one additional DPF point, odds of diabetes increase by a factor of 3.089 (significant). 
+
+ST: controlling for DPF, for every one additional mm in skin thickness, odds of diabetes increase by a factor of 1.051 (significant). 
+
+From the confusion matrix, there was an accuracy of 0.681, sensivity (TPR) of 0.215, specificity (TNR) of 0.912, and recall (PPV) of 0.549. The accurary is the proportion of correctly classified cases, the sensivity is the proportion of diabetic patients correctly classified, the specificity is the proportion of non-diabetics correctly classified, and precision is the proportion classified as diabetic who actually are. In addition, a density plot was used to visualize this. The calculated AUC from the ROC plot was 0.688. This is a poor AUC value, meaning that it is difficult to predict the odds of being diabetic from the diabetic pedigree function and skin thickness alone. With a 10 fold CV, there was an  out-of-sample accuracy of 0.734, sensitivity of 0.554, specificity of 0.826, and recall of 0.614. 
+
+## Part 6.
+
+```{R}
+library(glmnet)
+y<-as.matrix(ndata$y)
+x<-model.matrix(y~.,data=ndata)[,-1]
+head(x)
+cv<-cv.glmnet(x,y, family="binomial") 
+lasso<-glmnet(x,y,family="binomial",lambda=cv$lambda.1se) 
+coef(lasso)
+
+set.seed(1234) 
+k=10
+data1 <- ndata %>% sample_frac 
+folds <- ntile(1:nrow(data),n=10)
+
+diags<-NULL
+for(i in 1:k){
+  train <- data1[folds!=i,] 
+  test <- data1[folds==i,] 
+  truth <- test$y 
+  
+  fit3 <- glm(y~Glucose+ST+BMI+DPF+Age, 
+             data=train, family="binomial")
+  probs <- predict(fit3, newdata=test, type="response")
+  
+  diags<-rbind(diags,class_diag(probs,truth))
+}
+
+diags%>%summarize_all(mean)
+```
+
+This Lasso regression shows that glucose, skin thickness, BMI, DPF, and age were the most predictive of diabetes. 10-fold CV was performed, and the model's out-of-sample accuracy of 0.781 was higher compared to that of the logistic regression (0.688). In addition, the model's AUC of 0.848 was higher than that of the logistic regression (0.681)
+

@@ -1,0 +1,22 @@
+---
+title: Python
+author: ''
+date: '2020-05-13'
+slug: python
+categories: []
+tags: []
+description: ''
+---
+
+
+```{R}
+library(reticulate)
+#this is an R code chunk 
+y <- 5
+``` 
+
+
+```{python}
+#this is a python code chunk 
+r.y+3 == 8
+```

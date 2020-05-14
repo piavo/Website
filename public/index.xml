@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Portfolio</title>
+    <link>/</link>
+    <description>Recent content on Portfolio</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-US</language>
+    <lastBuildDate>Fri, 01 May 2020 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Python</title>
+      <link>/blog/python/</link>
+      <pubDate>Wed, 13 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/python/</guid>
+      <description> library(reticulate) #this is an R code chunk y &amp;lt;- 5 #this is a python code chunk r.y+3 == 8 ## True </description>
+    </item>
+    
+    <item>
+      <title>Pima Indians Diabetes Dataset</title>
+      <link>/project2/</link>
+      <pubDate>Fri, 01 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/project2/</guid>
+      <description>Introduction This diabetes dataset was obtained from the Kaggle website, and it provides diagnostic information about female patients at least 21 years of age and of Pima Indian heritage. This dataset contains 768 observations and 9 variables measuring the number of pregnancies the patient has had, plasma glucose concentration, blood pressure in mmHg, tricep skin fold thickness in mm, 2-hr serum insulin level in muU/ml, body mass index in kg/m^2, diabetes pedigree function (scores likelihood of diabetes based on family history), age in years, and whether the patient is diabetic (yes/no).</description>
+    </item>
+    
+    <item>
+      <title>Projects</title>
+      <link>/projects/</link>
+      <pubDate>Sun, 02 Oct 2016 22:55:05 -0400</pubDate>
+      
+      <guid>/projects/</guid>
+      <description>Projects  Statistical Modeling  </description>
+    </item>
+    
+  </channel>
+</rss>

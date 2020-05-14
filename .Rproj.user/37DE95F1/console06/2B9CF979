@@ -1,0 +1,7 @@
+]0;/stor/home/pgv235/Website]0;pgv235@educcomp01: ~/Website[01;32mpgv235@educcomp01[00m:[01;34m~/Website[00m$ [K]0;pgv235@educcomp01: ~/Website[01;32mpgv235@educcomp01[00m:[01;34m~/Website[00m$ [K]0;pgv235@educcomp01: ~/Website[01;32mpgv235@educcomp01[00m:[01;34m~/Website[00m$ got [K[K[Kit init
+Initialized empty Git repository in /stor/home/pgv235/Website/.git/
+]0;/stor/home/pgv235/Website]0;pgv235@educcomp01: ~/Website[01;32mpgv235@educcomp01[00m:[01;34m~/Website[00m$ ls
+config.toml  [0m[01;34mpublic[0m  Website.Rproj
+[01;34mcontent[0m      [01;34mstatic[0m
+index.Rmd    [01;34mthemes[0m
+]0;/stor/home/pgv235/Website]0;pgv235@educcomp01: ~/Website[01;32mpgv235@educcomp01[00m:[01;34m~/Website[00m$ got ass[K[Kdd. [K[K .[K]0;pgv235@educcomp01: ~/Website[01;32mpgv235@educcomp01[00m:[01;34m~/Website[00m$ got add .[K]0;pgv235@educcomp01: ~/Website[01;32mpgv235@educcomp01[00m:[01;34m~/Website[00m$ got add .[K[K[K[K[K[K[K[Kit add .
