@@ -20,7 +20,6 @@ theme = "hugo-sustain"
   custom_js  = []
 
 [params.social]
-  Github        = "piavo"
   Email         = "piavo@utexas.edu"
   
   
