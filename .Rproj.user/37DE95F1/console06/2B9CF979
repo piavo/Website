@@ -417,3 +417,35 @@ remote: Resolving deltas:   0% (0/22)[Kremote: Resolving deltas:   4% (1/22)[
 To https://github.com/piavo/Website.git
    6463489..06fb097  master -> master
 ]0;/stor/home/pgv235/Website]0;pgv235@educcomp01: ~/Website[01;32mpgv235@educcomp01[00m:[01;34m~/Website[00m$ pia[Kavo[K[K[K[K[Kgit add .
+]0;/stor/home/pgv235/Website]0;pgv235@educcomp01: ~/Website[01;32mpgv235@educcomp01[00m:[01;34m~/Website[00m$ git commit -m "hi2"[K3[K[K3" 
+[master 1519e3b] hi3
+ Committer: Pia Vo <pgv235@educcomp01.ccbb.utexas.edu>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly. Run the
+following command and follow the instructions in your editor to edit
+your configuration file:
+
+    git config --global --edit
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
+
+ 39 files changed, 406 insertions(+), 88 deletions(-)
+ delete mode 100644 .Rproj.user/37DE95F1/sources/s-f73d83bb/2805F6FF
+ delete mode 100644 .Rproj.user/37DE95F1/sources/s-f73d83bb/DB027F1D
+ delete mode 100644 .Rproj.user/37DE95F1/sources/s-f73d83bb/FBB6CC17
+ delete mode 100644 .Rproj.user/shared/notebooks/D6682AC-project2/1/37DE95F1f73d83bb/chunks.json
+ create mode 100644 content/about/2020-05-14-about-me.Rmd
+ create mode 100644 content/about/2020-05-14-about-me.html
+ create mode 100644 public/about/2020-05-14-about-me.Rmd
+ create mode 100644 public/about/about-me/index.html
+ create mode 100644 public/about/index.html
+ create mode 100644 public/about/index.xml
+]0;/stor/home/pgv235/Website]0;pgv235@educcomp01: ~/Website[01;32mpgv235@educcomp01[00m:[01;34m~/Website[00m$ git push origin master
+Username for 'https://github.com': pai  iavo 
+Password for 'https://piavo @github.com': 
+remote: Invalid username or password.
+fatal: Authentication failed for 'https://github.com/piavo/Website.git/'
+]0;/stor/home/pgv235/Website]0;pgv235@educcomp01: ~/Website[01;32mpgv235@educcomp01[00m:[01;34m~/Website[00m$ git add . p[K
