@@ -8,6 +8,7 @@ tags: []
 description: ''
 ---
 
+In the last portion of the SDS 348 course, I was introduced to Python. I learned a couple of handy things, let me show you! 
 
 ```{R}
 library(reticulate)

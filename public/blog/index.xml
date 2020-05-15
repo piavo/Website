@@ -17,7 +17,8 @@
       <pubDate>Wed, 13 May 2020 00:00:00 +0000</pubDate>
       
       <guid>/blog/python/</guid>
-      <description> library(reticulate) #this is an R code chunk y &amp;lt;- 5 #this is a python code chunk r.y+3 == 8 ## True </description>
+      <description> In the last portion of the SDS 348 course, I was introduced to Python. I learned a couple of handy things, let me show you!
+library(reticulate) #this is an R code chunk y &amp;lt;- 5 #this is a python code chunk r.y+3 == 8 ## True </description>
     </item>
     
   </channel>
