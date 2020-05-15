@@ -243,7 +243,7 @@ coeftest(fit)[, 1:2]</code></pre>
 })
 samp_distn %&gt;% t %&gt;% as.data.frame %&gt;% summarize_all(sd)</code></pre>
 <pre><code>##   (Intercept)      Age_c  Glucose_c Age_c:Glucose_c
-## 1   0.6422775 0.06491918 0.02068053     0.001955125</code></pre>
+## 1   0.6376637 0.06404189 0.02079306      0.00195584</code></pre>
 <p>Compared to the original standard errors, all the bootstrapped standard errors were higher except for Age_c where it was slightly lower. Higher standard errors correspond to lower p-values. Compared to the robust standard errors, all the bootstrapped standard errors were lower. Lower standard errors correspond to higher p-values.</p>
 </div>
 <div id="part-5." class="section level2">
@@ -395,5 +395,5 @@ for (i in 1:k) {
 diags %&gt;% summarize_all(mean)</code></pre>
 <pre><code>##         acc      sens      spec       ppv       auc
 ## 1 0.7807051 0.5559596 0.8819413 0.7091993 0.8475984</code></pre>
-<p>This Lasso regression shows that glucose, skin thickness, BMI, DPF, and age were the most predictive of diabetes. 10-fold CV was performed, and the model’s out-of-sample accuracy of 0.781 was higher compared to that of the logistic regression (0.688). In addition, the model’s AUC of 0.848 was higher than that of the logistic regression (0.681)</p>
+<p>This Lasso regression shows that glucose, skin thickness, BMI, DPF, and age were the most predictive of diabetes. 10-fold CV was performed, and the model’s out-of-sample accuracy of 0.781 was higher compared to that of the logistic regression (0.681). In addition, the model’s AUC of 0.848 was higher than that of the logistic regression (0.688).</p>
 </div>

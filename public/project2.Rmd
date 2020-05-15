@@ -260,5 +260,5 @@ for(i in 1:k){
 diags%>%summarize_all(mean)
 ```
 
-This Lasso regression shows that glucose, skin thickness, BMI, DPF, and age were the most predictive of diabetes. 10-fold CV was performed, and the model's out-of-sample accuracy of 0.781 was higher compared to that of the logistic regression (0.688). In addition, the model's AUC of 0.848 was higher than that of the logistic regression (0.681)
+This Lasso regression shows that glucose, skin thickness, BMI, DPF, and age were the most predictive of diabetes. 10-fold CV was performed, and the model's out-of-sample accuracy of 0.781 was higher compared to that of the logistic regression (0.681). In addition, the model's AUC of 0.848 was higher than that of the logistic regression (0.688).
 
