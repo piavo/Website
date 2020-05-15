@@ -6,7 +6,7 @@
     <description>Recent content in Blogs on Portfolio</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
-    <lastBuildDate>Wed, 13 May 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 14 May 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
     
@@ -14,11 +14,12 @@
     <item>
       <title>Python</title>
       <link>/blog/python/</link>
-      <pubDate>Wed, 13 May 2020 00:00:00 +0000</pubDate>
+      <pubDate>Thu, 14 May 2020 00:00:00 +0000</pubDate>
       
       <guid>/blog/python/</guid>
-      <description> In the last portion of the SDS 348 course, I was introduced to Python. I learned a couple of handy things, let me show you!
-library(reticulate) #this is an R code chunk y &amp;lt;- 5 #this is a python code chunk r.y+3 == 8 ## True </description>
+      <description>I was introduced to Python during the last portion of the SDS 348 course, and I learned a couple of neat things that I wanted to share! One such thing is the use of regular expressions and the re.findall() function, which finds all matches and returns them as a list of strings, with each string representing one match.
+Here are common regular expressions used in Python:
+ Now, let me show you how this can be applied in an example!</description>
     </item>
     
   </channel>

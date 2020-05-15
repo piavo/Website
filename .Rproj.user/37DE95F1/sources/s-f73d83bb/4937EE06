@@ -5,15 +5,15 @@
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "0",
+    "hash" : "677061279",
     "id" : "4937EE06",
-    "lastKnownWriteTime" : 1589508762,
-    "last_content_update" : 1589508762956,
+    "lastKnownWriteTime" : 1589516038,
+    "last_content_update" : 1589516038753,
     "path" : "~/Website/content/blog/2020-05-13-python.Rmd",
     "project_path" : "content/blog/2020-05-13-python.Rmd",
     "properties" : {
-        "cursorPosition" : "17,0",
-        "scrollLine" : "7"
+        "cursorPosition" : "36,19",
+        "scrollLine" : "28"
     },
     "relative_order" : 8,
     "source_on_save" : false,

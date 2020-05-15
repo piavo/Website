@@ -1,7 +1,7 @@
 ---
 title: Python
 author: ''
-date: '2020-05-13'
+date: '2020-05-14'
 slug: python
 categories: []
 tags: []
@@ -10,10 +10,25 @@ description: ''
 
 
 
-<p>In the last portion of the SDS 348 course, I was introduced to Python. I learned a couple of handy things, let me show you!</p>
-<pre class="r"><code>library(reticulate)
-#this is an R code chunk 
-y &lt;- 5</code></pre>
-<pre class="python"><code>#this is a python code chunk 
-r.y+3 == 8</code></pre>
-<pre><code>## True</code></pre>
+<p>I was introduced to Python during the last portion of the SDS 348 course, and I learned a couple of neat things that I wanted to share! One such thing is the use of regular expressions and the re.findall() function, which finds all matches and returns them as a list of strings, with each string representing one match.</p>
+<p>Here are common regular expressions used in Python:</p>
+<div class="figure">
+<img src="/blog/2020-05-13-python_files/pic.png" style="width:50.0%" style="height:50.0%" />
+
+</div>
+<p>Now, let me show you how this can be applied in an example!</p>
+<p>Using re.findall(), we can match all IP addressses in the following string.</p>
+<pre class="python"><code>import re
+
+string=&quot;Jan 13 00:48:59: DROP service 68-&gt;67(udp) from 213.92.153.167 to 69.43.107.219, prefix: \&quot;spoof iana-0/8\&quot; \
+(in: eth0 69.43.112.233(38:f8:b7:90:45:92):68 -&gt; 217.70.100.113(00:21:87:79:9c:d9):67 UDP len:576 ttl:64) \
+Jan 13 12:02:48: ACCEPT service dns from 74.125.186.208 to firewall(pub-nic-dns), prefix: \&quot;none\&quot; \
+(in: eth0 74.125.186.208(00:1a:e3:52:5d:8e):36008 -&gt; 140.105.63.158(00:1a:9a:86:2e:62):53 UDP len:82 ttl:38) \
+Jan 13 17:44:52: DROP service 68-&gt;67(udp) from 172.45.240.237 to 217.70.177.60, prefix: \&quot;spoof iana-0/8\&quot; \
+(in: eth0 216.34.90.16(00:21:91:fe:a2:6f):68 -&gt; 69.43.85.253(00:07:e1:7c:53:db):67 UDP len:328 ttl:64) \
+Jan 13 17:52:08: ACCEPT service http from 213.121.184.130 to firewall(pub-nic), prefix: \&quot;none\&quot; \
+(in: eth0 213.121.184.130(00:05:2e:6a:a4:14):8504 -&gt; 140.105.63.164(00:60:11:92:ed:1b):80 TCP flags: ****S* len:52 ttl:109)&quot;
+
+re.findall(r&quot;\d+\.\d+\.\d+\.\d+&quot;,string) </code></pre>
+<pre><code>## [&#39;213.92.153.167&#39;, &#39;69.43.107.219&#39;, &#39;69.43.112.233&#39;, &#39;217.70.100.113&#39;, &#39;74.125.186.208&#39;, &#39;74.125.186.208&#39;, &#39;140.105.63.158&#39;, &#39;172.45.240.237&#39;, &#39;217.70.177.60&#39;, &#39;216.34.90.16&#39;, &#39;69.43.85.253&#39;, &#39;213.121.184.130&#39;, &#39;213.121.184.130&#39;, &#39;140.105.63.164&#39;]</code></pre>
+<p>Pretty neat right?</p>
