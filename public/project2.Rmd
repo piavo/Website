@@ -1,5 +1,5 @@
 ---
-title: "Pima Indians Diabetes Dataset"
+title: "Pima Indians Diabetes"
 author: "Pia Vo"
 date: "2020-05-01"
 output:

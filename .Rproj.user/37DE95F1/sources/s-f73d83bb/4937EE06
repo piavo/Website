@@ -5,7 +5,7 @@
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "2926819299",
+    "hash" : "0",
     "id" : "4937EE06",
     "lastKnownWriteTime" : 1589516201,
     "last_content_update" : 1589516201184,
@@ -13,7 +13,7 @@
     "project_path" : "content/blog/2020-05-13-python.Rmd",
     "properties" : {
         "cursorPosition" : "18,42",
-        "scrollLine" : "10"
+        "scrollLine" : "12"
     },
     "relative_order" : 8,
     "source_on_save" : false,

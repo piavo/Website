@@ -1,5 +1,5 @@
 ---
-title: "Pima Indians Diabetes Dataset"
+title: "Pima Indians Diabetes"
 author: "Pia Vo"
 date: "2020-05-01"
 output:
@@ -243,7 +243,7 @@ coeftest(fit)[, 1:2]</code></pre>
 })
 samp_distn %&gt;% t %&gt;% as.data.frame %&gt;% summarize_all(sd)</code></pre>
 <pre><code>##   (Intercept)      Age_c  Glucose_c Age_c:Glucose_c
-## 1   0.6376637 0.06404189 0.02079306      0.00195584</code></pre>
+## 1   0.6316913 0.06351417 0.02087984     0.001958099</code></pre>
 <p>Compared to the original standard errors, all the bootstrapped standard errors were higher except for Age_c where it was slightly lower. Higher standard errors correspond to lower p-values. Compared to the robust standard errors, all the bootstrapped standard errors were lower. Lower standard errors correspond to higher p-values.</p>
 </div>
 <div id="part-5." class="section level2">
